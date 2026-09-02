@@ -8,7 +8,9 @@ Create a simple bot that can make and manage trades
 
 - [x] Sign up for API
 - [ ] *Currently* - reading through / learning API
-    - [ ] Get 1 stock to show up on the terminal
+    - [x] Get 1 stock to show up on the terminal
+- [ ] Make the candle stick things
+- [ ] JSON parser for responses
 - [ ] Test out the API without a bot
     - [ ] Create a dashboard
     - [ ] Make non-autonomous trades for the dashboard
