@@ -2,7 +2,7 @@ package com.bot.massive;
 
 public class Ticker {
 
-    public boolean active;
+    public Boolean active;
     public String cik;
     public String composite_figi;
     public String currency_name;

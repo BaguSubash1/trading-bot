@@ -3,30 +3,43 @@ package com.bot;
 import com.bot.massive.MassiveClient;
 import com.bot.massive.Ticker;
 import com.bot.util.DotEnv;
-import com.bot.util.JSON;
+import com.bot.util.JSONParser;
 import com.bot.util.RestClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
     static HashMap<String, String> env;
     static MassiveClient massive_client;
 
-    public static void main(String[] args) throws RestClient.ResponseException, IOException, JSON.MalformedJSONException, JSON.JSONDatatypeException {
+    public static class Test {
+
+        public String field;
+
+    }
+
+    public static void main(String[] args) throws RestClient.ResponseException, IOException, JSONParser.MalformedJSONException, JSONParser.JSONDatatypeException {
         env = DotEnv.get(".env");
         massive_client = new MassiveClient(env.get("api_key"));
 
-//         MassiveClient.Response<Ticker> response = massive_client.get_ticker(new HashMap<>(Map.of(
+//        MassiveClient.Response<Ticker> response = massive_client.get_ticker(new HashMap<>(Map.of(
 //                "market", "stocks",
 //                "active", "true",
 //                "order", "asc",
 //                "limit", "1"
 //        )));
 
-        System.out.println(JSON.parse("15", 0));
+        JSONParser parser = new JSONParser("[1, 2, 3]");
+
+        ArrayList<Integer> test = parser.parse_into(ArrayList.class);
+        System.out.println(Arrays.toString(test.toArray()));
     }
 
 }
