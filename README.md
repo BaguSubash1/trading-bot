@@ -4,6 +4,16 @@
 
 Create a simple bot that can make and manage trades
 
+## Usage
+
+Needs to be built (or see [releases](https://github.com/BaguSubash1/trading-bot/releases) for the latest build - none currently available)
+
+Create a `.env` file in the same directory as the `.jar` file with the following environmental variables,
+
+```.env
+api_key={YOUR_MASSIVE_API_KEY}
+```
+
 ## To-do
 
 - [x] Sign up for API
