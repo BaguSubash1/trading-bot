@@ -1,10 +1,12 @@
 package com.bot.massive;
 
+import com.bot.util.JSONParser;
 import com.bot.util.RestClient;
 
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Function;
 
 public class MassiveClient extends RestClient {
 
@@ -19,10 +21,22 @@ public class MassiveClient extends RestClient {
     public static class Response<T> {
 
         public int count;
-        public int next_url;
-        public int request_id;
-        public ArrayList<T> results;
+        public String next_url;
+        public String request_id;
         public String status;
+        public ArrayList<T> results = new ArrayList<>();
+
+        @SuppressWarnings("unchecked")
+        public Response(HashMap<String, Object> json, Function<HashMap<String, Object>, T> result_builder) {
+            count = (Integer) json.get("count");
+            next_url = (String) json.get("next_url");
+            request_id = (String) json.get("request_id");
+            status = (String) json.get("status");
+
+            for(final Object builder_map : (ArrayList<?>) json.get("results")) {
+                results.add(result_builder.apply((HashMap<String, Object>) builder_map));
+            }
+        }
 
     }
 
@@ -37,7 +51,11 @@ public class MassiveClient extends RestClient {
 
         // TODO: parse
         System.out.println(response);
-        return new Response<>();
+        try {
+            return new Response<>((HashMap<String, Object>) new JSONParser(response).parse(), Ticker::new);
+        } catch (JSONParser.MalformedJSONException e) {
+            throw new ResponseException(400);
+        }
     }
 
 }

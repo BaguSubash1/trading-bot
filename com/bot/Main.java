@@ -25,21 +25,18 @@ public class Main {
 
     }
 
-    public static void main(String[] args) throws RestClient.ResponseException, IOException, JSONParser.MalformedJSONException, JSONParser.JSONDatatypeException {
+    public static void main(String[] args) throws RestClient.ResponseException, IOException, JSONParser.MalformedJSONException {
         env = DotEnv.get(".env");
         massive_client = new MassiveClient(env.get("api_key"));
 
-//        MassiveClient.Response<Ticker> response = massive_client.get_ticker(new HashMap<>(Map.of(
-//                "market", "stocks",
-//                "active", "true",
-//                "order", "asc",
-//                "limit", "1"
-//        )));
+        MassiveClient.Response<Ticker> response = massive_client.get_ticker(new HashMap<>(Map.of(
+                "market", "stocks",
+                "active", "true",
+                "order", "asc",
+                "limit", "1"
+        )));
 
-        JSONParser parser = new JSONParser("[1, 2, 3]");
 
-        ArrayList<Integer> test = parser.parse_into(ArrayList.class);
-        System.out.println(Arrays.toString(test.toArray()));
     }
 
 }
