@@ -40,5 +40,11 @@ final MassiveClient.Response<Ticker> response = massive_client.get_ticker(new Qu
 });
 ```
 
+This code sends a request to the following url, and parses the response into a `MassiveClient.Response<Ticker>` object.
+
+```
+https://api.massive.com/v3/reference/tickers?market=stocks&active=true&order=asc&limit=1&apiKey=*************
+```
+
 > [!NOTE]
 > I am still working on the complete implementation of endpoints
