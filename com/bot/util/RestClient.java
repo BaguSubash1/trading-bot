@@ -1,6 +1,5 @@
 package com.bot.util;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -44,18 +43,6 @@ public class RestClient {
         }
 
         return response;
-    }
-
-    public static String stringify_query(HashMap<String, String> query) {
-        final StringBuilder builder = new StringBuilder();
-
-        query.forEach((key, value) -> builder
-                .append(builder.isEmpty() ? "?" : "&")
-                .append(key)
-                .append('=')
-                .append(value));
-
-        return builder.toString();
     }
 
 }

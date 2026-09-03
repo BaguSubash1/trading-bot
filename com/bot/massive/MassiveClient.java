@@ -1,6 +1,7 @@
 package com.bot.massive;
 
 import com.bot.util.JSONParser;
+import com.bot.util.Queryable;
 import com.bot.util.RestClient;
 
 import java.net.http.HttpResponse;
@@ -44,13 +45,12 @@ public class MassiveClient extends RestClient {
         return get(path + "&apiKey=" + api_key);
     }
 
-    public Response<Ticker> get_ticker(HashMap<String, String> query) throws ResponseException {
+    @SuppressWarnings("unchecked")
+    public Response<Ticker> get_ticker(Queryable query) throws ResponseException {
         final String response =
-                get_with_key("/reference/tickers" + RestClient.stringify_query(query))
+                get_with_key("/reference/tickers" + query.uri_query_string())
                         .body();
 
-        // TODO: parse
-        System.out.println(response);
         try {
             return new Response<>((HashMap<String, Object>) new JSONParser(response).parse(), Ticker::new);
         } catch (JSONParser.MalformedJSONException e) {

@@ -25,3 +25,20 @@ api_key={YOUR_MASSIVE_API_KEY}
     - [ ] Create a dashboard
     - [ ] Make non-autonomous trades for the dashboard
 - [ ] Create the bot
+
+## Notes
+
+Built a few helper functions for requesting things from the API, see [`MassiveClient`](com/bot/massive/MassiveClient.java)
+
+```java
+// Example Request to get a ticker
+final MassiveClient.Response<Ticker> response = massive_client.get_ticker(new Queryable() {
+  String market = "stocks";
+  boolean active = true;
+  String order = "asc";
+  int limit = 1;
+});
+```
+
+> [!NOTE]
+> I am still working on the complete implementation of endpoints
