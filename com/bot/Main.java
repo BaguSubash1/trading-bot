@@ -14,7 +14,7 @@ public class Main {
     static MassiveClient massive;
 
     @SuppressWarnings("unused")
-    public static void main(String[] args) throws IOException, MassiveClient.QueryException {
+    public static void main(String[] args) throws IOException {
         env = DotEnv.get(".env");
         massive = new MassiveClient(env.get("api_key"));
 

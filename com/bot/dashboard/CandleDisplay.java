@@ -1,4 +1,12 @@
 package com.bot.dashboard;
 
-public class CandleDisplay {
+import java.awt.*;
+
+public class CandleDisplay extends Panel {
+
+    public CandleDisplay() {
+
+
+    }
+
 }
