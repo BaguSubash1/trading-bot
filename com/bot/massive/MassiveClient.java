@@ -1,22 +1,24 @@
 package com.bot.massive;
 
+import com.bot.util.JSON;
 import com.bot.util.JSONParser;
 import com.bot.util.Queryable;
 import com.bot.util.RestClient;
 
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
 public class MassiveClient extends RestClient {
 
-    private final String api_key;
+    private final Queryable api_key_query;
 
     public MassiveClient(String api_key) {
         super("api.massive.com", "/v3");
-        assert api_key != null;
-        this.api_key = api_key;
+
+        api_key_query = new Queryable() {
+            String apiKey = api_key;
+        };
     }
 
     public static class Response<T> {
@@ -41,21 +43,39 @@ public class MassiveClient extends RestClient {
 
     }
 
-    private HttpResponse<String> get_with_key(String path) throws ResponseException {
-        return get(path + "&apiKey=" + api_key);
+    public static class QueryException extends Exception {
+        public QueryException(String message, Exception parent) {
+            super(message);
+            this.setStackTrace(parent.getStackTrace());
+        }
     }
 
-    @SuppressWarnings("unchecked")
-    public Response<Ticker> get_ticker(Queryable query) throws ResponseException {
-        final String response =
-                get_with_key("/reference/tickers" + query.uri_query_string())
-                        .body();
+    private interface ExceptionInterceptor<T> {
+        T run() throws ResponseException, JSONParser.MalformedJSONException;
+    }
 
+    private static <T> T intercept_exceptions(ExceptionInterceptor<T> interceptor) throws QueryException {
         try {
-            return new Response<>((HashMap<String, Object>) new JSONParser(response).parse(), Ticker::new);
-        } catch (JSONParser.MalformedJSONException e) {
-            throw new ResponseException(400);
+            return interceptor.run();
+        } catch (ResponseException exception) {
+            throw new QueryException("http status: " + exception.status, exception);
+        } catch (JSONParser.MalformedJSONException exception) {
+            throw new QueryException("JSON parsing failed (likely malformed data)", exception);
         }
+    }
+
+    public JSON<?> query_tickers(Queryable query) throws QueryException {
+        return intercept_exceptions(() -> {
+            final String response = get("/reference/tickers" + query.uri_query_string(api_key_query)).body();
+            return JSON.parse(response);
+        });
+    }
+
+    public JSON<?> get_ticker(String ticker, Queryable query) throws QueryException {
+        return intercept_exceptions(() -> {
+            final String response = get("/reference/tickers/" + ticker + query.uri_query_string(api_key_query)).body();
+            return JSON.parse(response);
+        });
     }
 
 }

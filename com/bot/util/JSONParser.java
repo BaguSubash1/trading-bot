@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class JSONParser {
 
     private static final String TOKENS_REGEX =
-            /* language=RegExp */ "([{}\\[\\]:,])|(\"(?:\\\\.|.)*?\")|(\\d+)|(true|false)|(\\s+)";
+            /* language=RegExp */ "([{}\\[\\]:,])|(\"(?:\\\\.|.)*?\")|(\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?)|(true|false)|(\\s+)|(.)";
 
     private final Matcher tokens;
 
@@ -44,11 +44,11 @@ public class JSONParser {
         return tokens.group(group);
     }
 
-    private Object parse_next() throws MalformedJSONException {
+    private JSON<?> parse_next() throws MalformedJSONException {
         if(tokens.group(1) != null) {
             switch(tokens.group(1).charAt(0)) {
                 case '{':
-                    final HashMap<String, Object> map = new HashMap<>();
+                    final HashMap<String, JSON<?>> map = new HashMap<>();
 
                     while(advance(0).charAt(0) != '}') {
                         String key = get(2);
@@ -70,7 +70,7 @@ public class JSONParser {
                         throw new MalformedJSONException();
                     }
 
-                    return map;
+                    return new JSON<>(map);
 
                 case '[':
                     final ArrayList<Object> array = new ArrayList<>();
@@ -87,7 +87,7 @@ public class JSONParser {
                         throw new MalformedJSONException();
                     }
 
-                    return array;
+                    return new JSON<>(array);
 
                 default:
                     throw new MalformedJSONException();
@@ -96,17 +96,24 @@ public class JSONParser {
 
         if(tokens.group(2) != null) {
             final String string = tokens.group(2);
-            return string.substring(1, string.length() - 1).translateEscapes();
+            return new JSON<>(string.substring(1, string.length() - 1).translateEscapes());
         }
 
         if(tokens.group(3) != null) {
-            return Integer.parseInt(tokens.group(3));
+            if(tokens.group(3).contains(".")) {
+                return new JSON<>(Double.parseDouble(tokens.group(3)));
+            }
+            return new JSON<>(Long.parseLong(tokens.group(3)));
         }
 
-        return tokens.group(4).equals("true");
+        if(tokens.group(4) != null) {
+            return new JSON<>(tokens.group(4).equals("true"));
+        }
+
+        throw new MalformedJSONException();
     }
 
-    public Object parse() throws MalformedJSONException {
+    public JSON<?> parse() throws MalformedJSONException {
         advance(0);
         return parse_next();
     }
