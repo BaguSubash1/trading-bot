@@ -20,8 +20,8 @@ api_key={YOUR_MASSIVE_API_KEY}
 - [ ] *Currently* - reading through / learning API
     - [x] Get 1 stock to show up on the terminal
 - [ ] Make the candle stick things
-- [ ] JSON parser for responses
-- [ ] Test out the API without a bot
+- [x] JSON parser for responses
+- [x] Test out the API without a bot
     - [ ] Create a dashboard
     - [ ] Make non-autonomous trades for the dashboard
 - [ ] Create the bot
