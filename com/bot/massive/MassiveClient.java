@@ -14,33 +14,11 @@ public class MassiveClient extends RestClient {
     private final Queryable api_key_query;
 
     public MassiveClient(String api_key) {
-        super("api.massive.com", "/v3");
+        super("api.massive.com", "");
 
         api_key_query = new Queryable() {
             String apiKey = api_key;
         };
-    }
-
-    public static class Response<T> {
-
-        public int count;
-        public String next_url;
-        public String request_id;
-        public String status;
-        public ArrayList<T> results = new ArrayList<>();
-
-        @SuppressWarnings("unchecked")
-        public Response(HashMap<String, Object> json, Function<HashMap<String, Object>, T> result_builder) {
-            count = (Integer) json.get("count");
-            next_url = (String) json.get("next_url");
-            request_id = (String) json.get("request_id");
-            status = (String) json.get("status");
-
-            for(final Object builder_map : (ArrayList<?>) json.get("results")) {
-                results.add(result_builder.apply((HashMap<String, Object>) builder_map));
-            }
-        }
-
     }
 
     public static class QueryException extends Exception {
@@ -66,14 +44,43 @@ public class MassiveClient extends RestClient {
 
     public JSON<?> query_tickers(Queryable query) throws QueryException {
         return intercept_exceptions(() -> {
-            final String response = get("/reference/tickers" + query.uri_query_string(api_key_query)).body();
+            final String response = get("/v3/reference/tickers" + query.uri_query_string(api_key_query)).body();
             return JSON.parse(response);
         });
     }
 
     public JSON<?> get_ticker(String ticker, Queryable query) throws QueryException {
         return intercept_exceptions(() -> {
-            final String response = get("/reference/tickers/" + ticker + query.uri_query_string(api_key_query)).body();
+            final String response = get("/v3/reference/tickers/" + ticker + query.uri_query_string(api_key_query)).body();
+            return JSON.parse(response);
+        });
+    }
+
+    public enum TimeSpan {
+
+        Second("second"),
+        Minute("minute"),
+        Hour("hour"),
+        Day("day"),
+        Week("week"),
+        Month("month"),
+        Quarter("quarter"),
+        Year("year");
+
+        public final String string;
+
+        TimeSpan(String value) {
+            this.string = value;
+        }
+
+    }
+
+    public JSON<?> get_custom_bars(String ticker, int multiplier, TimeSpan timespan, String from, String to,
+                                   Queryable query) throws QueryException {
+        return intercept_exceptions(() -> {
+            final String response = get(
+                    "/v2/aggs/ticker/" + ticker + "/range/" + multiplier + "/" + timespan.string + "/" + from + "/" + to +
+                    query.uri_query_string(api_key_query)).body();
             return JSON.parse(response);
         });
     }

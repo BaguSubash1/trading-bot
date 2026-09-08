@@ -32,6 +32,14 @@ public class JSON<T> {
         return new JSON<>(null);
     }
 
+    @SuppressWarnings("unchecked")
+    public int length() {
+        if(value instanceof ArrayList<?>) {
+            return ((ArrayList<JSON<?>>) value).size();
+        }
+        return -1;
+    }
+
     public static JSON<?> parse(String json) throws JSONParser.MalformedJSONException {
         JSONParser parser = new JSONParser(json);
         return parser.parse();

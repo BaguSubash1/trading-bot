@@ -25,6 +25,7 @@ public class RestClient {
     }
 
     public HttpResponse<String> get(String path) throws ResponseException {
+        System.out.println("REQUEST: " + path);
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(base + path))
                 .GET()

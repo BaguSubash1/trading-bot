@@ -48,6 +48,7 @@ public class Info extends Panel {
                 info_panel.add(description, c);
                 add(info_panel, c);
 
+                Dashboard.replace_candles(new CandleDisplay(ticker_name));
                 Dashboard.update();
             });
         });

@@ -6,6 +6,7 @@ import java.awt.*;
 public class Dashboard extends JPanel {
 
     private static Dashboard self;
+    private static CandleDisplay candle_display;
 
     public Dashboard() {
         super(new GridBagLayout());
@@ -34,12 +35,19 @@ public class Dashboard extends JPanel {
         c.insets = new Insets(2, 2, 4, 4);
         c.gridx = 1;
         c.weightx = 0.75;
-        add(new CandleDisplay(), c);
+        candle_display = new CandleDisplay(null);
+        add(candle_display, c);
     }
 
     public static void update() {
         self.revalidate();
         self.repaint();
+    }
+
+    public static void replace_candles(CandleDisplay display) {
+        self.remove(candle_display);
+        candle_display = display;
+        self.add(candle_display);
     }
 
 }
