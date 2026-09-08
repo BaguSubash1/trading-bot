@@ -23,7 +23,7 @@ public class CandleDisplay extends Panel {
 
     }
 
-    private ArrayList<Candle> candles;
+    private final ArrayList<Candle> candles = new ArrayList<>();
 
     private final int DAY_DELAY = 5;
 
@@ -36,9 +36,9 @@ public class CandleDisplay extends Panel {
         final String query_date = LocalDate.now().minusDays(DAY_DELAY).toString();
 
         ErrorDispatch.wrap_operation(() -> Main.massive.get_custom_bars(
-                ticker, 1, MassiveClient.TimeSpan.Hour, query_date, query_date, new Queryable() {}), bars -> {
+                ticker, 1, MassiveClient.TimeSpan.Minute, query_date, query_date, new Queryable() {}), bars -> {
             final long bar_count = bars.get("resultsCount").get(Long.class);
-            candles = new ArrayList<>((int) bar_count);
+            candles.ensureCapacity((int) bar_count);
             final JSON<?> results = bars.get("results");
 
             for(int i = 0; i < bar_count; i++) {
@@ -46,6 +46,58 @@ public class CandleDisplay extends Panel {
             }
         });
 
+    }
+
+    private int price_to_pixel(double price, double min, double max) {
+        final int PADDING = 50;
+        return (int) ((1 - (price - min) / (max - min)) * (getHeight() - PADDING * 2)) + PADDING;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(candles.isEmpty()) {
+            return;
+        }
+
+        final Graphics2D g2 = (Graphics2D) g;
+        final int max_candles = Math.min(getWidth() / 4, candles.size());
+
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+
+        for(int i = 0; i < max_candles; i++) {
+            min = Math.min(min, candles.get(i).low());
+            max = Math.max(max, candles.get(i).high());
+        }
+
+        final int SPACING = 1;
+        final int WIDTH = getWidth() / max_candles - SPACING;
+
+        for(int i = 0; i < max_candles; i++) {
+            final Candle candle = candles.get(i);
+
+            final int CANDLE_X = i * (WIDTH + SPACING) + WIDTH / 2;
+            if(candle.close() == candle.open()) {
+                g2.setColor(Colors.SUBTLE);
+                g2.drawLine(CANDLE_X, 0, CANDLE_X, getHeight());
+                g2.fillRect(i * (WIDTH + SPACING), price_to_pixel(candle.low(), min, max) - WIDTH * 2,
+                        WIDTH, WIDTH * 4);
+                continue;
+            }
+
+            g2.setColor(candle.close() > candle.open() ? Color.green : Color.red);
+
+            g2.drawLine(
+                    CANDLE_X, price_to_pixel(candle.high(), min, max),
+                    CANDLE_X, price_to_pixel(candle.low(), min, max));
+
+            final int bouse = price_to_pixel(candle.close(), min, max);
+            final int touse = price_to_pixel(candle.open(), min, max);
+            g2.fillRect(
+                    i * (WIDTH + SPACING), Math.min(bouse, touse),
+                    WIDTH, Math.abs(bouse - touse));
+        }
     }
 
 }

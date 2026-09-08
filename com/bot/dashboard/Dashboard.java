@@ -7,6 +7,7 @@ public class Dashboard extends JPanel {
 
     private static Dashboard self;
     private static CandleDisplay candle_display;
+    private static GridBagConstraints candle_constraints;
 
     public Dashboard() {
         super(new GridBagLayout());
@@ -37,6 +38,7 @@ public class Dashboard extends JPanel {
         c.weightx = 0.75;
         candle_display = new CandleDisplay(null);
         add(candle_display, c);
+        candle_constraints = c;
     }
 
     public static void update() {
@@ -47,7 +49,7 @@ public class Dashboard extends JPanel {
     public static void replace_candles(CandleDisplay display) {
         self.remove(candle_display);
         candle_display = display;
-        self.add(candle_display);
+        self.add(candle_display, candle_constraints);
     }
 
 }

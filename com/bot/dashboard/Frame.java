@@ -32,7 +32,7 @@ public class Frame extends JFrame {
         });
 
         pack();
-        setResizable(false);
+//        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }

@@ -4,6 +4,10 @@
 
 Create a simple bot that can make and manage trades
 
+<div algin="center">
+  <img src="assets/bars-example.png" />
+</div>
+
 ## Usage
 
 Needs to be built (or see [releases](https://github.com/BaguSubash1/trading-bot/releases) for the latest build - none currently available)
