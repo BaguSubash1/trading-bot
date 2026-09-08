@@ -16,6 +16,14 @@ public class JSON<T> {
         return (K) value;
     }
 
+    public double any_double() {
+        if(value instanceof Long) {
+            return (double)(long) value;
+        }
+
+        return (double) value;
+    }
+
     @SuppressWarnings("unchecked")
     public JSON<?> get(String field) {
         if(value instanceof HashMap<?, ?>) {

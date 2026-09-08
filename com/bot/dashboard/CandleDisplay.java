@@ -15,12 +15,10 @@ public class CandleDisplay extends Panel {
 
         public Candle(JSON<?> json) {
             this(
-                    json.get("o").get(Double.class),
-                    json.get("h").get(Double.class),
-                    json.get("l").get(Double.class),
-                    json.get("c").get(Double.class));
-
-            System.out.println(open);
+                    json.get("o").any_double(),
+                    json.get("h").any_double(),
+                    json.get("l").any_double(),
+                    json.get("c").any_double());
         }
 
     }
