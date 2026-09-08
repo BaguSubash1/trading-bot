@@ -38,7 +38,7 @@ public class Info extends Panel {
                 final WhiteText title = new WhiteText(ticker.get("results").get("name").get(String.class));
                 title.setFont(title.getFont().deriveFont(Font.BOLD));
 
-                final WhiteText currency = new WhiteText(ticker.get("results").get("currency").get(String.class));
+                final WhiteText currency = new WhiteText(ticker.get("results").get("currency_name").get(String.class));
                 currency.setFont(currency.getFont().deriveFont(Font.ITALIC));
 
                 final WhiteText description = new WhiteText(ticker.get("results").get("description").get(String.class));
