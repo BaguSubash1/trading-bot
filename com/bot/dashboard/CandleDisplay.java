@@ -8,7 +8,6 @@ import com.bot.util.Queryable;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 public class CandleDisplay extends Panel {
 
@@ -37,7 +36,7 @@ public class CandleDisplay extends Panel {
         final String query_date = LocalDate.now().minusDays(DAY_DELAY).toString();
 
         ErrorDispatch.wrap_operation(() -> Main.massive.get_custom_bars(
-                ticker, 1, MassiveClient.TimeSpan.Minute, query_date, query_date, new Queryable() {}), bars -> {
+                ticker, 30, MassiveClient.TimeSpan.Minute, query_date, query_date, new Queryable() {}), bars -> {
             final long bar_count = bars.get("resultsCount").get(Long.class);
             candles.ensureCapacity((int) bar_count);
             final JSON<?> results = bars.get("results");
@@ -54,16 +53,20 @@ public class CandleDisplay extends Panel {
         return (int) ((1 - (price - min) / (max - min)) * (getHeight() - PADDING * 2)) + PADDING;
     }
 
-    private void draw_average_line(Graphics2D g2, int i, Candle candle, int WIDTH, int SPACING, int CANDLE_X,
+    private void draw_average_lines(Graphics2D g2, int i, Candle candle, int WIDTH, int SPACING, int CANDLE_X,
                                    double min, double max) {
         if(i == 0) return;
 
-        g2.setColor(Colors.AVERAGE_LINE);
+        final int PREV_X = (i - 1) * (WIDTH + SPACING) + WIDTH / 2;
+        final Candle prev_candle = candles.get(i - 1);
 
-        g2.drawLine(
-                (i - 1) * (WIDTH + SPACING) + WIDTH / 2,
-                price_to_pixel((candles.get(i - 1).low() + candles.get(i - 1).high()) / 2, min, max),
-                CANDLE_X, price_to_pixel((candle.low() + candle.high()) / 2, min, max));
+        g2.setColor(Colors.HL_AVERAGE_LINE);
+        g2.drawLine(PREV_X, price_to_pixel((prev_candle.high() + prev_candle.low()) / 2, min, max),
+                CANDLE_X, price_to_pixel((candle.high() + candle.low()) / 2, min, max));
+
+        g2.setColor(Colors.OC_AVERAGE_LINE);
+        g2.drawLine(PREV_X, price_to_pixel((prev_candle.open() + prev_candle.close()) / 2, min, max),
+                CANDLE_X, price_to_pixel((candle.open() + candle.close()) / 2, min, max));
     }
 
     @Override
@@ -97,7 +100,7 @@ public class CandleDisplay extends Panel {
                 g2.fillRect(i * (WIDTH + SPACING), price_to_pixel(candle.low(), min, max) - WIDTH * 2,
                         WIDTH, WIDTH * 4);
 
-                draw_average_line(g2, i, candle, WIDTH, SPACING, CANDLE_X, min, max);
+                draw_average_lines(g2, i, candle, WIDTH, SPACING, CANDLE_X, min, max);
                 continue;
             }
 
@@ -113,7 +116,7 @@ public class CandleDisplay extends Panel {
                     i * (WIDTH + SPACING), Math.min(bouse, touse),
                     WIDTH, Math.abs(bouse - touse));
 
-            draw_average_line(g2, i, candle, WIDTH, SPACING, CANDLE_X, min, max);
+            draw_average_lines(g2, i, candle, WIDTH, SPACING, CANDLE_X, min, max);
         }
     }
 

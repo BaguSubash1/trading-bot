@@ -5,7 +5,7 @@
 Create a simple bot that can make and manage trades
 
 <div algin="center">
-  <img src="assets/bars-example.png" />
+  <img src="assets/candles-screenshot.png" />
 </div>
 
 ## Usage
