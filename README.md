@@ -23,10 +23,12 @@ api_key={YOUR_MASSIVE_API_KEY}
 - [x] Sign up for API
 - [ ] *Currently* - reading through / learning API
     - [x] Get 1 stock to show up on the terminal
-- [ ] Make the candle stick things
+- [x] Make the candle stick things
+    - [ ] Add dates / time and grid-lines
+    - [ ] Make scrollable
 - [x] JSON parser for responses
 - [x] Test out the API without a bot
-    - [ ] Create a dashboard
+    - [x] Create a dashboard
     - [ ] Make non-autonomous trades for the dashboard
 - [ ] Create the bot
 
