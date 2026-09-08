@@ -35,7 +35,6 @@ public interface Queryable {
             append_builder(builder, query);
         }
 
-        System.out.println(builder);
         return builder.toString();
     }
 

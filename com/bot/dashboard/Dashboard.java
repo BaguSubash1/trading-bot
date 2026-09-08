@@ -5,8 +5,11 @@ import java.awt.*;
 
 public class Dashboard extends JPanel {
 
+    private static Dashboard self;
+
     public Dashboard() {
         super(new GridBagLayout());
+        self = this;
         setBackground(Colors.BACKGROUND);
         setPreferredSize(new Dimension(960, 540));
 
@@ -32,6 +35,11 @@ public class Dashboard extends JPanel {
         c.gridx = 1;
         c.weightx = 0.75;
         add(new CandleDisplay(), c);
+    }
+
+    public static void update() {
+        self.revalidate();
+        self.repaint();
     }
 
 }

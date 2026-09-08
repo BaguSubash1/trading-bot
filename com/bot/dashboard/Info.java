@@ -1,5 +1,8 @@
 package com.bot.dashboard;
 
+import com.bot.Main;
+import com.bot.util.Queryable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,12 +12,44 @@ public class Info extends Panel {
 
     public Info() {
 
+        setLayout(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+
+        c.gridx = 0;
+        c.gridy = GridBagConstraints.RELATIVE;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
+
         final JTextField ticker_field = new JTextField("Ticker");
-        add(ticker_field);
+        add(ticker_field, c);
 
         ticker_field.addActionListener(action -> {
-            System.out.println(action.getActionCommand());
-            ErrorDispatch.dispatch_error(action.getActionCommand());
+            final String ticker_name = action.getActionCommand();
+
+            ErrorDispatch.wrap_operation(() -> Main.massive.get_ticker(ticker_name, new Queryable() {}), ticker -> {
+                if(info_panel != null) {
+                    remove(info_panel);
+                }
+
+                info_panel = new JPanel();
+                info_panel.setLayout(new GridBagLayout());
+                info_panel.setOpaque(false);
+
+                final WhiteText title = new WhiteText(ticker.get("results").get("name").get(String.class));
+                title.setFont(title.getFont().deriveFont(Font.BOLD));
+
+                final WhiteText currency = new WhiteText(ticker.get("results").get("currency").get(String.class));
+                currency.setFont(currency.getFont().deriveFont(Font.ITALIC));
+
+                final WhiteText description = new WhiteText(ticker.get("results").get("description").get(String.class));
+
+                info_panel.add(title, c);
+                info_panel.add(currency, c);
+                info_panel.add(description, c);
+                add(info_panel, c);
+
+                Dashboard.update();
+            });
         });
 
     }

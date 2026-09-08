@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class Main {
 
-    static HashMap<String, String> env;
-    static MassiveClient massive;
+    public static HashMap<String, String> env;
+    public static MassiveClient massive;
 
     @SuppressWarnings("unused")
     public static void main(String[] args) throws IOException {
