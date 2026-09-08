@@ -17,7 +17,7 @@ public class ErrorDispatch extends JPanel {
     }
 
     public static void dispatch_error(String message) {
-        final JLabel error_label = new JLabel("<html><body >" + message + "</body></html>");
+        final JLabel error_label = new JLabel("<html><body>" + message + "</body></html>");
         error_label.setForeground(Color.red);
 
         panel.add(error_label);
