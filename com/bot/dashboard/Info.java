@@ -26,7 +26,7 @@ public class Info extends Panel {
         ticker_field.addActionListener(action -> {
             final String ticker_name = action.getActionCommand();
 
-            ErrorDispatch.wrap_operation(() -> Main.massive.get_ticker(ticker_name, new Queryable() {}), ticker -> {
+            ErrorDispatch.wrap_operation(() -> Main.massive.get_ticker(ticker_name, Queryable.NONE), ticker -> {
                 if(info_panel != null) {
                     remove(info_panel);
                 }

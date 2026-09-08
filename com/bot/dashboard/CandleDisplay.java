@@ -26,10 +26,10 @@ public class CandleDisplay extends Panel {
     }
 
     private final ArrayList<Candle> candles = new ArrayList<>();
-    private double min_price;
-    private double max_price;
-    private String currency_name;
-    private String date;
+    private double min_price = Double.MAX_VALUE;
+    private double max_price = Double.MIN_VALUE;
+    private final String currency_name;
+    private final String date;
     private int mouse_x = 0;
     private int mouse_y = 0;
 
@@ -45,13 +45,10 @@ public class CandleDisplay extends Panel {
         }
 
         ErrorDispatch.wrap_operation(() -> Main.massive.get_custom_bars(
-                ticker, 30, MassiveClient.TimeSpan.Minute, date, date, new Queryable() {}), bars -> {
+                ticker, 30, MassiveClient.TimeSpan.Minute, date, date, Queryable.NONE), bars -> {
             final long bar_count = bars.get("resultsCount").get(Long.class);
             candles.ensureCapacity((int) bar_count);
             final JSON<?> results = bars.get("results");
-
-            min_price = Double.MAX_VALUE;
-            max_price = Double.MIN_VALUE;
 
             for(int i = 0; i < bar_count; i++) {
                 final Candle candle = new Candle(results.get(i));
@@ -99,6 +96,7 @@ public class CandleDisplay extends Panel {
                 CANDLE_X, price_to_pixel((candle.open() + candle.close()) / 2));
     }
 
+    // TODO: just clean up this whole function yikes
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
