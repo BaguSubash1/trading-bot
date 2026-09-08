@@ -94,7 +94,7 @@ public class CandleDisplay extends Panel {
             final Candle candle = candles.get(i);
             final int CANDLE_X = i * (WIDTH + SPACING) + WIDTH / 2;
 
-            if(candle.close() == candle.open()) {
+            if(candle.low() == candle.high()) {
                 g2.setColor(Colors.SUBTLE);
                 g2.drawLine(CANDLE_X, 0, CANDLE_X, getHeight());
                 g2.fillRect(i * (WIDTH + SPACING), price_to_pixel(candle.low(), min, max) - WIDTH * 2,
