@@ -9,7 +9,7 @@ public class Nav extends Panel {
         setLayout(new GridBagLayout());
         setPreferredSize(new Dimension(0, 24));
 
-        add(new WhiteText("Trading Bot App"));
+        add(new WhiteText("TradEZ"));
     }
 
 }

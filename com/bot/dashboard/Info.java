@@ -38,7 +38,8 @@ public class Info extends Panel {
                 final WhiteText title = new WhiteText(ticker.get("results").get("name").get(String.class));
                 title.setFont(title.getFont().deriveFont(Font.BOLD));
 
-                final WhiteText currency = new WhiteText(ticker.get("results").get("currency_name").get(String.class));
+                final String currency_name = ticker.get("results").get("currency_name").get(String.class);
+                final WhiteText currency = new WhiteText(currency_name);
                 currency.setFont(currency.getFont().deriveFont(Font.ITALIC));
 
                 final WhiteText description = new WhiteText(ticker.get("results").get("description").get(String.class));
@@ -48,7 +49,7 @@ public class Info extends Panel {
                 info_panel.add(description, c);
                 add(info_panel, c);
 
-                Dashboard.replace_candles(new CandleDisplay(ticker_name));
+                Dashboard.replace_candles(new CandleDisplay(ticker_name, currency_name));
                 Dashboard.update();
             });
         });

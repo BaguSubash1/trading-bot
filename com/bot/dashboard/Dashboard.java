@@ -36,7 +36,7 @@ public class Dashboard extends JPanel {
         c.insets = new Insets(2, 2, 4, 4);
         c.gridx = 1;
         c.weightx = 0.75;
-        candle_display = new CandleDisplay(null);
+        candle_display = new CandleDisplay(null, "?");
         add(candle_display, c);
         candle_constraints = c;
     }

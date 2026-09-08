@@ -8,7 +8,7 @@ import java.awt.event.ComponentEvent;
 public class Frame extends JFrame {
 
     public Frame() {
-        super("Trading Bot");
+        super("TradEZ");
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(960, 540));
