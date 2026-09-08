@@ -51,3 +51,7 @@ https://api.massive.com/v3/reference/tickers?market=stocks&active=true&order=asc
 
 > [!NOTE]
 > I am still working on the complete implementation of endpoints
+
+## Deliverables
+
+- [Deliverable 1](https://docs.google.com/document/d/1h_lPv4-y-MJmq0EvWo9_2c5j4hwAc-DDNpUwC_O64Yk/edit?usp=sharing)
