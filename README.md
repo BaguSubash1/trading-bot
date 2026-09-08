@@ -28,6 +28,9 @@ api_key={YOUR_MASSIVE_API_KEY}
 
 ## Notes
 
+> [!WARNING]
+> This is outdated, these methods return `JSON<?>` objects.
+
 Built a few helper functions for requesting things from the API, see [`MassiveClient`](com/bot/massive/MassiveClient.java)
 
 ```java
