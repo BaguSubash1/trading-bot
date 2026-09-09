@@ -97,6 +97,7 @@ public class CandleDisplay extends Panel {
     }
 
     // TODO: just clean up this whole function yikes
+    // TODO: implement scrolling and horizontal grid lines
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
